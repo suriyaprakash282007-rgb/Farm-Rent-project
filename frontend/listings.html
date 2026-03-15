@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Equipment — FarmRent 🌾</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">🌾 Farm<span>Rent</span></a>
+    <button class="navbar-menu-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+    <ul class="navbar-nav" id="navbar-nav">
+      <li><a href="listings.html" class="active">Browse</a></li>
+      <li><a href="add-equipment.html" id="nav-add" style="display:none">+ List Equipment</a></li>
+      <li><a href="login.html" id="nav-login">Login</a></li>
+      <li><a href="profile.html" id="nav-profile" style="display:none">Profile</a></li>
+      <li><a href="#" id="nav-logout" style="display:none" onclick="logout();return false;">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="container">
+      <h1>🔍 Browse Equipment</h1>
+      <p>Find farm equipment available for rent near you</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label for="search-input">Search</label>
+      <input type="text" id="search-input" class="form-group input" placeholder="Search by name or location…"
+             style="padding:0.55rem 0.8rem;border:1.5px solid var(--border);border-radius:6px;font-size:0.95rem;outline:none" />
+    </div>
+    <div class="filter-group">
+      <label for="filter-district">District</label>
+      <input type="text" id="filter-district" placeholder="e.g. Nagpur"
+             style="padding:0.55rem 0.8rem;border:1.5px solid var(--border);border-radius:6px;font-size:0.95rem;outline:none" />
+    </div>
+    <div class="filter-group">
+      <label for="filter-type">Equipment Type</label>
+      <select id="filter-type"
+              style="padding:0.55rem 0.8rem;border:1.5px solid var(--border);border-radius:6px;font-size:0.95rem;background:var(--white);outline:none">
+        <option value="">All Types</option>
+        <option value="tractor">🚜 Tractor</option>
+        <option value="harvester">🌾 Harvester</option>
+        <option value="seeder">🌱 Seeder</option>
+        <option value="pump">💧 Pump</option>
+        <option value="sprayer">🪣 Sprayer</option>
+        <option value="other">🔧 Other</option>
+      </select>
+    </div>
+    <div class="filter-group" style="justify-content:flex-end;min-width:auto">
+      <label>&nbsp;</label>
+      <button class="btn btn-secondary btn-sm" onclick="clearFilters()">Clear Filters</button>
+    </div>
+  </div>
+
+  <!-- Listings grid -->
+  <div class="section" style="padding-top:1.5rem">
+    <div class="container">
+      <div id="listings-grid" class="listings-grid">
+        <div class="loading-state" style="grid-column:1/-1">
+          <div class="spinner"></div>
+          <p>Loading equipment...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 FarmRent 🌾 — Empowering farmers through equipment sharing</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/listings.js"></script>
+  <script>
+    function clearFilters() {
+      document.getElementById('filter-district').value = '';
+      document.getElementById('filter-type').value = '';
+      document.getElementById('search-input').value = '';
+      loadEquipment();
+    }
+  </script>
+</body>
+</html>

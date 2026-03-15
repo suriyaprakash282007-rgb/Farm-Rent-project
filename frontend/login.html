@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Register — FarmRent 🌾</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">🌾 Farm<span>Rent</span></a>
+    <button class="navbar-menu-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+    <ul class="navbar-nav" id="navbar-nav">
+      <li><a href="listings.html">Browse</a></li>
+      <li><a href="add-equipment.html" id="nav-add" style="display:none">+ List Equipment</a></li>
+      <li><a href="login.html" id="nav-login" class="active">Login</a></li>
+      <li><a href="profile.html" id="nav-profile" style="display:none">Profile</a></li>
+      <li><a href="#" id="nav-logout" style="display:none" onclick="logout();return false;">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="form-page">
+    <div class="form-card">
+      <h1>🌾 Welcome to FarmRent</h1>
+      <p class="subtitle">Join thousands of farmers sharing equipment locally.</p>
+
+      <!-- Tab switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-pane">
+        <div id="login-alert" class="alert" style="display:none"></div>
+        <form id="login-form" onsubmit="submitLogin(event)">
+          <div class="form-group">
+            <label for="login-phone">Phone Number</label>
+            <input type="tel" id="login-phone" placeholder="Enter your mobile number" required />
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Enter your password" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" id="login-btn">Login</button>
+        </form>
+        <p style="text-align:center;margin-top:1rem;font-size:0.9rem;color:var(--text-light)">
+          New to FarmRent? <a href="#" onclick="switchTab('register');return false;" style="color:var(--primary);font-weight:600">Register here</a>
+        </p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-pane" style="display:none">
+        <div id="register-alert" class="alert" style="display:none"></div>
+        <form id="register-form" onsubmit="submitRegister(event)">
+          <div class="form-group">
+            <label for="reg-name">Full Name *</label>
+            <input type="text" id="reg-name" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">Phone Number *</label>
+            <input type="tel" id="reg-phone" placeholder="10-digit mobile number" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-village">Village *</label>
+              <input type="text" id="reg-village" placeholder="Your village" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-district">District *</label>
+              <input type="text" id="reg-district" placeholder="Your district" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-password">Password *</label>
+              <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" />
+            </div>
+            <div class="form-group">
+              <label for="reg-confirm">Confirm Password *</label>
+              <input type="password" id="reg-confirm" placeholder="Repeat password" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" id="register-btn">Create Account</button>
+        </form>
+        <p style="text-align:center;margin-top:1rem;font-size:0.9rem;color:var(--text-light)">
+          Already have an account? <a href="#" onclick="switchTab('login');return false;" style="color:var(--primary);font-weight:600">Login</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 FarmRent 🌾 — Empowering farmers through equipment sharing</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Redirect if already logged in
+    document.addEventListener('DOMContentLoaded', () => {
+      if (isLoggedIn()) window.location.href = 'profile.html';
+
+      // Check if redirected with ?tab=register
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('tab') === 'register') switchTab('register');
+    });
+
+    function switchTab(tab) {
+      const loginPane = document.getElementById('login-pane');
+      const registerPane = document.getElementById('register-pane');
+      const loginBtn = document.getElementById('tab-login');
+      const registerBtn = document.getElementById('tab-register');
+
+      if (tab === 'login') {
+        loginPane.style.display = 'block';
+        registerPane.style.display = 'none';
+        loginBtn.classList.add('active');
+        registerBtn.classList.remove('active');
+      } else {
+        loginPane.style.display = 'none';
+        registerPane.style.display = 'block';
+        loginBtn.classList.remove('active');
+        registerBtn.classList.add('active');
+      }
+    }
+
+    async function submitLogin(e) {
+      e.preventDefault();
+      hideAlert('login-alert');
+
+      const phone = document.getElementById('login-phone').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!phone || !password) {
+        showAlert('login-alert', 'Phone and password are required.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true;
+      btn.textContent = 'Logging in…';
+
+      try {
+        const data = await apiCall('/auth/login', 'POST', { phone, password });
+        setToken(data.token);
+        setUser(data.user);
+        showAlert('login-alert', '✅ Login successful! Redirecting…', 'success');
+        setTimeout(() => { window.location.href = 'profile.html'; }, 1200);
+      } catch (err) {
+        showAlert('login-alert', err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    }
+
+    async function submitRegister(e) {
+      e.preventDefault();
+      hideAlert('register-alert');
+
+      const name = document.getElementById('reg-name').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const village = document.getElementById('reg-village').value.trim();
+      const district = document.getElementById('reg-district').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirm = document.getElementById('reg-confirm').value;
+
+      if (!name || !phone || !village || !district || !password) {
+        showAlert('register-alert', 'All fields are required.', 'error');
+        return;
+      }
+      if (password.length < 6) {
+        showAlert('register-alert', 'Password must be at least 6 characters.', 'error');
+        return;
+      }
+      if (password !== confirm) {
+        showAlert('register-alert', 'Passwords do not match.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('register-btn');
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+
+      try {
+        const data = await apiCall('/auth/register', 'POST', { name, phone, village, district, password });
+        setToken(data.token);
+        setUser(data.user);
+        showAlert('register-alert', '✅ Account created! Redirecting…', 'success');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+      } catch (err) {
+        showAlert('register-alert', err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    }
+  </script>
+</body>
+</html>

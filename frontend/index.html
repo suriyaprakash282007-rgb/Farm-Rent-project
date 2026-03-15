@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FarmRent 🌾 — Rent Farm Equipment Nearby</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">🌾 Farm<span>Rent</span></a>
+    <button class="navbar-menu-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+    <ul class="navbar-nav" id="navbar-nav">
+      <li><a href="listings.html">Browse</a></li>
+      <li><a href="add-equipment.html" id="nav-add" style="display:none">+ List Equipment</a></li>
+      <li><a href="login.html" id="nav-login">Login</a></li>
+      <li><a href="profile.html" id="nav-profile" style="display:none">Profile</a></li>
+      <li><a href="#" id="nav-logout" style="display:none" onclick="logout();return false;">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Rent Farm Equipment Nearby</h1>
+    <p>Connect with local farmers and rent tractors, harvesters, pumps, and more at affordable prices.</p>
+    <div class="hero-search">
+      <input type="text" id="hero-search" placeholder="Search equipment or location…" aria-label="Search" />
+      <button onclick="heroSearch()">🔍 Find Equipment</button>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" style="background:var(--white)">
+    <div class="container">
+      <h2 class="section-title">Why FarmRent?</h2>
+      <p class="section-subtitle">Everything you need to share and rent agricultural tools locally</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Easy Booking</h3>
+          <p>Book equipment with a few taps. Select your dates and send a request instantly.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Find Locally</h3>
+          <p>Filter by district and village. Find equipment from farmers in your area.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Trusted Reviews</h3>
+          <p>Read honest reviews from fellow farmers before making a booking decision.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>Direct Contact</h3>
+          <p>Connect directly via phone or WhatsApp with the equipment owner.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Getting started is simple and free</p>
+      <div class="how-grid">
+        <div class="how-step">
+          <div class="step-number">1</div>
+          <h3>Browse Equipment</h3>
+          <p>Search for available farm equipment in your area using district or village filters.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-number">2</div>
+          <h3>Book &amp; Contact</h3>
+          <p>Select your dates on the calendar and send a booking request to the owner.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-number">3</div>
+          <h3>Use &amp; Return</h3>
+          <p>Pick up the equipment, use it for your farm work, and return it in good condition.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Ready to rent or share?</h2>
+    <p>Join thousands of farmers already using FarmRent to share equipment and reduce costs.</p>
+    <div class="cta-buttons">
+      <a href="listings.html" class="btn btn-primary" style="background:var(--accent-dark);border-color:var(--accent-dark)">Browse Equipment</a>
+      <a href="add-equipment.html" class="btn btn-secondary">List Your Equipment</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 FarmRent 🌾 — Empowering farmers through equipment sharing</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function heroSearch() {
+      const query = document.getElementById('hero-search').value.trim();
+      const url = query ? `listings.html?search=${encodeURIComponent(query)}` : 'listings.html';
+      window.location.href = url;
+    }
+    document.getElementById('hero-search').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') heroSearch();
+    });
+  </script>
+</body>
+</html>
