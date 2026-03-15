@@ -4,7 +4,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Farmer = require('../models/Farmer');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+if (!process.env.JWT_SECRET) {
+  console.warn('⚠️  WARNING: JWT_SECRET is not set. Using insecure default — set it in your .env file!');
+}
+const JWT_SECRET = process.env.JWT_SECRET || 'farmrent_dev_secret_change_me';
 const signToken = (farmer) =>
   jwt.sign({ id: farmer._id, name: farmer.name }, JWT_SECRET, { expiresIn: '7d' });
 
