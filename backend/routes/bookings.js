@@ -6,12 +6,13 @@ const {
   updateBookingStatus,
 } = require('../controllers/bookingController');
 const { protect } = require('../middleware/auth');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
 
-router.post('/', protect, createBooking);
-router.get('/', protect, getBookings);
-router.get('/:id', protect, getBookingById);
-router.put('/:id/status', protect, updateBookingStatus);
+router.post('/', apiLimiter, protect, createBooking);
+router.get('/', apiLimiter, protect, getBookings);
+router.get('/:id', apiLimiter, protect, getBookingById);
+router.put('/:id/status', apiLimiter, protect, updateBookingStatus);
 
 module.exports = router;

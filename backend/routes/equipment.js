@@ -10,16 +10,17 @@ const {
 } = require('../controllers/equipmentController');
 const { protect } = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
 
-router.get('/', getEquipment);
-router.get('/my-listings', protect, getMyListings);
-router.get('/:id', getEquipmentById);
+router.get('/', apiLimiter, getEquipment);
+router.get('/my-listings', apiLimiter, protect, getMyListings);
+router.get('/:id', apiLimiter, getEquipmentById);
 
-router.post('/', protect, upload.array('photos', 5), createEquipment);
-router.put('/:id', protect, upload.array('photos', 5), updateEquipment);
-router.delete('/:id', protect, deleteEquipment);
-router.put('/:id/availability', protect, updateAvailability);
+router.post('/', apiLimiter, protect, upload.array('photos', 5), createEquipment);
+router.put('/:id', apiLimiter, protect, upload.array('photos', 5), updateEquipment);
+router.delete('/:id', apiLimiter, protect, deleteEquipment);
+router.put('/:id/availability', apiLimiter, protect, updateAvailability);
 
 module.exports = router;

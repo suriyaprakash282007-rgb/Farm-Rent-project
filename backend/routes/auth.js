@@ -9,11 +9,13 @@ const {
   markNotificationRead,
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
+const { authLimiter, apiLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
 
 router.post(
   '/register',
+  authLimiter,
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
@@ -25,6 +27,7 @@ router.post(
 
 router.post(
   '/login',
+  authLimiter,
   [
     body('email').isEmail().withMessage('Valid email is required'),
     body('password').notEmpty().withMessage('Password is required'),
@@ -32,9 +35,9 @@ router.post(
   login
 );
 
-router.get('/me', protect, getMe);
-router.put('/profile', protect, updateProfile);
-router.get('/notifications', protect, getNotifications);
-router.put('/notifications/:notifId/read', protect, markNotificationRead);
+router.get('/me', apiLimiter, protect, getMe);
+router.put('/profile', apiLimiter, protect, updateProfile);
+router.get('/notifications', apiLimiter, protect, getNotifications);
+router.put('/notifications/:notifId/read', apiLimiter, protect, markNotificationRead);
 
 module.exports = router;
