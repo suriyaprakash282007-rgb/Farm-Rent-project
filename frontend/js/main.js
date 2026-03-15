@@ -79,7 +79,7 @@ function updateNavbar() {
 
 function logout() {
   removeToken();
-  window.location.href = '/index.html';
+  window.location.href = 'index.html';
 }
 
 // ===== UI Helpers =====
