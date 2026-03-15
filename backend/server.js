@@ -2,10 +2,28 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const path = require('path');
 
 const app = express();
+
+// Rate limiters
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' },
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts, please try again later.' },
+});
 
 // Security middleware
 app.use(helmet({
@@ -25,14 +43,14 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// API Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/equipment', require('./routes/equipment'));
-app.use('/api/bookings', require('./routes/bookings'));
-app.use('/api/reviews', require('./routes/reviews'));
+// API Routes (rate limited)
+app.use('/api/auth', authLimiter, require('./routes/auth'));
+app.use('/api/equipment', generalLimiter, require('./routes/equipment'));
+app.use('/api/bookings', generalLimiter, require('./routes/bookings'));
+app.use('/api/reviews', generalLimiter, require('./routes/reviews'));
 
-// SPA fallback: serve index.html for non-API routes
-app.get('*', (req, res) => {
+// SPA fallback: serve index.html for non-API routes (rate limited)
+app.get('*', generalLimiter, (req, res) => {
   if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
   }
