@@ -198,7 +198,7 @@ const DEMO_EQUIPMENT = [
     description: 'Multi-crop seeder attachment. Works with most power tillers. Reduces seeding time by 60%.',
     photo_url: '',
     price_per_day: 600,
-    village: 'Yeotmal',
+    village: 'Yavatmal',
     district: 'Yavatmal',
     contact_phone: '9645321087',
     whatsapp: '9645321087',
