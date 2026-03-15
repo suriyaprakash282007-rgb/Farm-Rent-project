@@ -1,0 +1,107 @@
+.equipment-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.equipment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.equipment-card-image {
+  position: relative;
+  height: 180px;
+  background: #e9ecef;
+  overflow: hidden;
+}
+
+.equipment-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.equipment-card:hover .equipment-card-image img {
+  transform: scale(1.05);
+}
+
+.equipment-badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.equipment-card-body {
+  padding: 1rem;
+}
+
+.equipment-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.equipment-location {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.equipment-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.equipment-price {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--green-primary);
+  font-size: 0.95rem;
+}
+
+.equipment-price span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.equipment-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: #f59e0b;
+}
+
+.equipment-rating span {
+  color: var(--text-muted);
+}
+
+.equipment-owner {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+}
