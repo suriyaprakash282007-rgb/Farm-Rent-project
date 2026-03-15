@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Equipment — FarmRent 🌾</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">🌾 Farm<span>Rent</span></a>
+    <button class="navbar-menu-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+    <ul class="navbar-nav" id="navbar-nav">
+      <li><a href="listings.html">Browse</a></li>
+      <li><a href="add-equipment.html" id="nav-add" style="display:none">+ List Equipment</a></li>
+      <li><a href="login.html" id="nav-login">Login</a></li>
+      <li><a href="profile.html" id="nav-profile" style="display:none">Profile</a></li>
+      <li><a href="#" id="nav-logout" style="display:none" onclick="logout();return false;">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="booking-layout">
+
+    <!-- Left: Equipment Details -->
+    <div class="equipment-details-card">
+      <div class="detail-photo" id="detail-photo">⏳</div>
+      <div class="equipment-details-body">
+        <div id="detail-badge"></div>
+        <h2 id="detail-name">Loading…</h2>
+        <div class="big-price"><span id="detail-price">₹—</span> <span>/ day</span></div>
+        <div class="detail-row">📍 <span id="detail-location">—</span></div>
+        <div class="detail-row" id="detail-owner-row">👨‍🌾 <span id="detail-owner">—</span></div>
+        <div class="detail-row">📞 <span id="detail-phone">—</span></div>
+        <div class="detail-row" id="detail-whatsapp"></div>
+        <div class="detail-row" id="detail-rating"></div>
+        <p id="detail-desc" style="margin-top:0.75rem;color:var(--text-light);font-size:0.9rem;line-height:1.55"></p>
+
+        <!-- Reviews section -->
+        <div style="margin-top:1.5rem">
+          <h3 style="font-size:1rem;color:var(--primary);margin-bottom:0.75rem">Customer Reviews</h3>
+          <div id="reviews-list">
+            <p style="color:var(--text-light);font-size:0.85rem">Loading reviews…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Booking Form -->
+    <div>
+      <!-- Availability Calendar -->
+      <div class="booking-form-card" style="margin-bottom:1.5rem">
+        <h2>📅 Availability Calendar</h2>
+        <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.75rem">
+          Click a start date then an end date to select your rental period.
+        </p>
+        <div id="availability-calendar"></div>
+      </div>
+
+      <!-- Booking Form -->
+      <div class="booking-form-card" id="booking-form-section">
+        <h2>📋 Book This Equipment</h2>
+
+        <div class="total-price-display">
+          <div class="total-label">Selected Period</div>
+          <div style="font-size:0.9rem;color:var(--text-dark);margin:0.25rem 0">
+            <span id="selected-start">—</span> → <span id="selected-end">—</span>
+            (<span id="total-days">—</span>)
+          </div>
+          <div class="total-label">Total Cost</div>
+          <div class="total-amount" id="total-price">₹0</div>
+        </div>
+
+        <div id="booking-alert" class="alert" style="display:none"></div>
+
+        <form id="booking-form">
+          <div class="form-group">
+            <label for="booking-message">Message to Owner (optional)</label>
+            <textarea id="booking-message" placeholder="Introduce yourself, mention your farm location, crop type, etc."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            📬 Send Booking Request
+          </button>
+        </form>
+      </div>
+
+      <!-- Leave a review -->
+      <div class="booking-form-card" style="margin-top:1.5rem" id="review-section">
+        <h2>⭐ Leave a Review</h2>
+        <div id="review-alert" class="alert" style="display:none"></div>
+        <form id="review-form">
+          <div class="form-group">
+            <label>Rating</label>
+            <div id="star-selector" style="display:flex;gap:0.5rem;font-size:1.8rem;cursor:pointer">
+              <span class="star" data-val="1">☆</span>
+              <span class="star" data-val="2">☆</span>
+              <span class="star" data-val="3">☆</span>
+              <span class="star" data-val="4">☆</span>
+              <span class="star" data-val="5">☆</span>
+            </div>
+            <input type="hidden" id="review-rating" value="0" />
+          </div>
+          <div class="form-group">
+            <label for="review-comment">Comment</label>
+            <textarea id="review-comment" placeholder="Share your experience with this equipment…"></textarea>
+          </div>
+          <button type="submit" class="btn btn-secondary btn-full">Submit Review</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 FarmRent 🌾 — Empowering farmers through equipment sharing</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/booking.js"></script>
+  <script>
+    // Star rating selector
+    document.addEventListener('DOMContentLoaded', () => {
+      const stars = document.querySelectorAll('#star-selector .star');
+      const ratingInput = document.getElementById('review-rating');
+
+      stars.forEach(star => {
+        star.addEventListener('mouseover', () => {
+          const val = parseInt(star.dataset.val);
+          stars.forEach((s, i) => s.textContent = i < val ? '★' : '☆');
+        });
+        star.addEventListener('mouseleave', () => {
+          const cur = parseInt(ratingInput.value);
+          stars.forEach((s, i) => s.textContent = i < cur ? '★' : '☆');
+        });
+        star.addEventListener('click', () => {
+          ratingInput.value = star.dataset.val;
+        });
+      });
+
+      // Review form
+      const reviewForm = document.getElementById('review-form');
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (!isLoggedIn()) {
+            showAlert('review-alert', 'Please log in to leave a review.', 'error');
+            return;
+          }
+          const rating = parseInt(document.getElementById('review-rating').value);
+          if (!rating) {
+            showAlert('review-alert', 'Please select a star rating.', 'error');
+            return;
+          }
+          const comment = document.getElementById('review-comment').value.trim();
+          const urlParams = new URLSearchParams(window.location.search);
+          const equipmentId = urlParams.get('id');
+          try {
+            await apiCall('/reviews', 'POST', { equipment_id: equipmentId, rating, comment });
+            showAlert('review-alert', '✅ Review submitted! Thank you.', 'success');
+            reviewForm.reset();
+            document.querySelectorAll('#star-selector .star').forEach(s => s.textContent = '☆');
+            document.getElementById('review-rating').value = '0';
+            loadReviews(equipmentId);
+          } catch (err) {
+            showAlert('review-alert', err.message, 'error');
+          }
+        });
+      }
+
+      // Load reviews
+      const urlParams = new URLSearchParams(window.location.search);
+      const equipmentId = urlParams.get('id');
+      if (equipmentId) loadReviews(equipmentId);
+
+      // Hide review section if not logged in
+      if (!isLoggedIn()) {
+        const rs = document.getElementById('review-section');
+        if (rs) rs.style.display = 'none';
+      }
+    });
+
+    async function loadReviews(equipmentId) {
+      const container = document.getElementById('reviews-list');
+      if (!container) return;
+      try {
+        const reviews = await apiCall(`/reviews/equipment/${equipmentId}`);
+        if (!reviews.length) {
+          container.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem">No reviews yet. Be the first to review!</p>';
+          return;
+        }
+        container.innerHTML = reviews.map(r => `
+          <div style="padding:0.75rem 0;border-bottom:1px solid var(--border)">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem">
+              <span style="color:#f59e0b;font-size:1rem">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+              <strong style="font-size:0.9rem">${r.reviewer ? r.reviewer.name : 'Farmer'}</strong>
+              <span style="color:var(--text-light);font-size:0.78rem;margin-left:auto">${formatDate(r.created_at)}</span>
+            </div>
+            ${r.comment ? `<p style="font-size:0.87rem;color:var(--text-dark)">${r.comment}</p>` : ''}
+          </div>`).join('');
+      } catch {
+        container.innerHTML = '<p style="color:var(--text-light);font-size:0.85rem">Could not load reviews.</p>';
+      }
+    }
+  </script>
+</body>
+</html>
